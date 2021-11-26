@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinymce Already</title>
+    <!-- Tinymce kişisel script kodu. Bunu almak için tinymce.com adresinden üyelik yapın. Size verilen script kodunu buraya girin. -->
+    <script src="https://cdn.tiny.cloud/1/ewvaczvvjuly6xqmeblii5zuytka35w4gmgi88ymzx524ucb/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    
+
+    <!-- Tinymce'nin sürekli gelen uyarı pencerelerini engellemek için aşağıdaki style kodunu muhakkak kullanmalısınız. -->
+    <style>
+        .tox-notifications-container {display: none !important;}
+    </style>
+</head>
+<body>
+    
+    <header>
+        <h1 style="text-align: center;">TinyMce Basit Kullanımı</h1>
+    </header>
+    <main>
+        <section>
+            <form>
+                <textarea class="editor" rows="25"></textarea>
+            </form>
+        </section>
+    </main>
+
+    <!-- Tinymce javascript -->
+     <script>
+        tinymce.init({
+          selector: 'textarea.editor',
+            skin: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide'),
+            content_css: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default'),
+          setup: function(editor){
+            editor.on('init change', function(){
+              editor.save();
+            });
+          },
+          plugins: 'link a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist image media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker code codesample',
+          codesample_languages: [
+        { text: 'HTML/XML', value: 'markup' },
+        { text: 'JavaScript', value: 'javascript' },
+        { text: 'CSS', value: 'css' },
+        { text: 'PHP', value: 'php' },
+        { text: 'Ruby', value: 'ruby' },
+        { text: 'Python', value: 'python' },
+        { text: 'Java', value: 'java' },
+        { text: 'C', value: 'c' },
+        { text: 'C#', value: 'csharp' },
+        { text: 'C++', value: 'cpp' }
+      ],
+          toolbar: 'undo redo | styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent |a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table codesample | link image',
+          image_title : true,
+          automatic_uploads: true,
+          // images_upload_url : '/upload',
+          //images_upload_base_path:'/storage/images',
+          file_picker_types : 'file image media',
+          file_picker_callback: function (cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+    
+            input.onchange = function () {
+              var file = this.files[0];
+    
+              var reader = new FileReader();
+              reader.onload = function () {
+    
+                var id = 'blobid' + (new Date()).getTime();
+                var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                var base64 = reader.result.split(',')[1];
+                var blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+    
+                /* call the callback and populate the Title field with the file name */
+                cb(blobInfo.blobUri(), { title: file.name });
+              };
+              reader.readAsDataURL(file);
+            };
+    
+            input.click();
+          },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          toolbar_mode: 'floating',
+          tinycomments_mode: 'embedded',
+          tinycomments_author: 'Author name',
+          a11y_advanced_options : true,
+          autosave_ask_before_unload: false,
+      });
+    </script>
+</body>
+</html>
