@@ -1,4 +1,4 @@
-# Tinymce Already
+# Tinymce Ready
 
 Go to the [tiny.cloud](https://tiny.cloud) web site. Sign in and take the private script code for you.
 Change the script tag in `<head>` tag.
